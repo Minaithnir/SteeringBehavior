@@ -88,9 +88,11 @@ class Unit
         Vector evade(Unit& target);
 
         Vector unallignedCollisionAvoidance(std::vector<Unit*>& others);
+        Vector unallignedCollisionAvoidance(std::vector<Unit>& others);
 
         ///Attributs spécifique démo
         Unit* target;
+        std::vector<Unit>* units;
 
     protected:
         /// Attributs physiques

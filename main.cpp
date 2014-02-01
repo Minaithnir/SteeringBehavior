@@ -5,7 +5,7 @@
 
 #define WIDTH 1900
 #define HEIGHT 1000
-#define DEMO_UNIT_COUNT 1000
+#define DEMO_UNIT_COUNT 50
 
 int main()
 {
@@ -22,6 +22,7 @@ int main()
         units.push_back(Unit());
         units.back().setPosition(Vector(rand()%WIDTH, rand()%HEIGHT));
         units.back().target = &target;
+        units.back().units = &units;
         units.back().setUnitBehavior(SEEK);
     }
 

@@ -37,30 +37,38 @@ void Unit::setColor(sf::Color color)
 */
 void Unit::update()
 {
-    if(target != NULL)
+    if(units!=NULL)
     {
-        switch (m_behavior)
-        {
-        case SEEK :
-            m_steering = seek(target->getPosition());
-            break;
-        case FLEE :
-            m_steering = flee(target->getPosition());
-            break;
-        case PURSUE :
-            m_steering = pursue((*target));
-            break;
-        case EVADE :
-            m_steering = evade((*target));
-            break;
-        default :
-            m_steering = wander();
-            break;
-        }
+        m_steering = unallignedCollisionAvoidance(*units);
     }
-    else
+
+    if(m_steering == Vector(0,0))
     {
-        m_steering = wander();
+        if(target != NULL)
+        {
+            switch (m_behavior)
+            {
+            case SEEK :
+                m_steering = seek(target->getPosition());
+                break;
+            case FLEE :
+                m_steering = flee(target->getPosition());
+                break;
+            case PURSUE :
+                m_steering = pursue((*target));
+                break;
+            case EVADE :
+                m_steering = evade((*target));
+                break;
+            default :
+                m_steering = wander();
+                break;
+            }
+        }
+        else
+        {
+            m_steering = wander();
+        }
     }
 }
 
@@ -236,4 +244,18 @@ Vector Unit::unallignedCollisionAvoidance(std::vector<Unit*>& others)
     }
 
     return steering;
+}
+
+/**
+    calcule la force necessaire pour éviter les collision à venir avec d'autres unitées
+*/
+Vector Unit::unallignedCollisionAvoidance(std::vector<Unit>& others)
+{
+    std::vector<Unit*> unitsPtr;
+    for(unsigned int i=0; i<others.size(); i++)
+    {
+        unitsPtr.push_back(&(others[i]));
+    }
+
+    return unallignedCollisionAvoidance(unitsPtr);
 }
